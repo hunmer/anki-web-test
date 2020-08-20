@@ -1,0 +1,74 @@
+body {
+    margin: 0px;
+}
+
+._card {
+	width: 100%;
+}
+
+#bar {
+	z-index: 1;
+	cursor: pointer;
+	width: 100%;
+	position: fixed;
+	bottom: 0px;
+	border-top: 1px solid red;
+	text-align: center;
+	display: block;
+}
+
+/* 右上角菜单 */
+._action_menu {
+	display: flex;
+}
+
+._action_menu a {
+	margin-right: 20px;
+}
+
+/* 显示答案按钮 */
+.getAnswer {
+	background: #616161;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #9bc5c3, #616161);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #9bc5c3, #616161); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	padding: 20px;
+	background-color: #bbbbbb;
+}
+
+/* 选择得分 */
+.sourceBar {
+	display: flex;
+	background-color: #bbbbbb;
+}
+
+.sourceBar ._btn {
+	cursor: pointer;
+	border-right: 1px solid white;
+	width: 33.3%;
+	padding: 20px;
+}
+
+.sourceBar ._btn:nth-child(1){
+background: #ED213A;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #93291E, #ED213A);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #93291E, #ED213A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.sourceBar ._btn:nth-child(2){
+background: #2193b0;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.sourceBar ._btn:nth-child(3){
+background: #56ab2f;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.dango_list span {
+	margin-top: 0px !important;
+}
