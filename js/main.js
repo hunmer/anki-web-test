@@ -12,6 +12,8 @@ var g_name; // 打开的名字
 
 
 $(function() {
+
+
 	M.AutoInit();
 	//$('#dropdown1').css('marginTop', '64px');
 	$('._card').height($(this).height() - 50);
@@ -25,6 +27,10 @@ $(function() {
 	}else{
 		initData(json);
 	}
+
+	$(window).resize(function(event) {
+		$('._card').height($(this).height() - 50);
+	});
 
 	$(document).on('click', '.collapsible li', function(event) {
 		var d = $(this).find('div.collapsible-body');
