@@ -168,7 +168,7 @@ function getHtml(data, index){
 				if(i != -1){
 					var v = data.fields[i];
 					if(i == 7){
-						v = v.replace('|', "</br>");
+						v = v.replace(/\|/g, "</br>");
 					}
 					if(v.indexOf('src') != -1){
 						v = v.replace('src="', 'src="./res/'+g_uuid+'/');
