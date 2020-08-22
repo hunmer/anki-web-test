@@ -1,0 +1,100 @@
+<meta charset="utf-8">
+<style type="text/css">
+	#container{
+		width: 50%;
+		height: 100px;
+		margin: 0px auto;
+		border: 5px solid red;
+		text-align: center;
+	}
+
+	#res {
+		margin-top: 30px;
+		width: 100%;
+		height: 300px;
+	}
+</style>
+<div id='container'>
+	<span>拖放json文件到这里</span>
+</div>
+<div>
+	<textarea id='res'></textarea>
+</div>
+
+<script type="text/javascript" src='js/jquery.min.js'></script>
+<script type="text/javascript">
+	var data = {};
+    document.ondragover = function (e) {
+        e.preventDefault(); 
+    };
+    document.ondrop = function (e) {
+        e.preventDefault();
+    };
+    $('#container').ondragover = function (e) {
+        e.preventDefault();
+    };
+    $('#container').ondrop = function (e) {
+        console.log(e.dataTransfer);
+        var list = e.dataTransfer.files;
+        for (var i = 0; i < list.length; i++) {
+            var f = list[i];
+            console.log(f);
+            if(f.substr(-5).toLocaleLowerCase() == '.json'){
+            	reader(f);
+            }
+        }
+    };
+    function reader(f) {
+        var reader = new FileReader();
+        reader.readAsText(f);
+        reader.onload = function () {
+        	try {
+        		loadJson(JSON.parse(reader.result));
+        	}
+        	catch(err){
+        		alert(err);
+        	}
+        }
+    }
+
+	$.getJSON('./res/deck.json', function(json, textStatus) {
+		loadJson(json);
+	});
+
+	function loadJson(json){
+		data.desc = json.desc;
+		data.name = json.name;
+		data.note_models = {};
+		data.note_models.crowdanki_uuid = json.note_models[0].crowdanki_uuid;
+		data.note_models.css = json.note_models[0].css;
+		data.note_models.name = json.note_models[0].name;
+		data.note_models.html = [];
+		data.note_models.html.push(json.note_models[0].tmpls[0].qfmt);
+		data.note_models.html.push(json.note_models[0].tmpls[0].afmt);
+		data.note_models.flds = [];
+		for(var n of json.note_models[0].flds){
+			data.note_models.flds.push(n.name);
+		}
+		data.notes = [];
+		for(var n of json.notes){
+			data.notes.push(n.fields);
+		}
+		console.log(data);
+		downloadData($data);
+		//console.log('window.copy(JSON.stringify(data))')
+	}
+
+	 function downloadData(d){
+        var eleLink = document.createElement('a');
+        eleLink.download = 'data.json';
+        eleLink.style.display = 'none';
+        var blob = new Blob([JSON.stringify(d)]);
+        eleLink.href = URL.createObjectURL(blob);
+        document.body.appendChild(eleLink);
+        eleLink.click();
+        document.body.removeChild(eleLink);
+    }
+
+</script>
+
+<!-- 四字熟語 -->

@@ -1,0 +1,22 @@
+<script type="text/javascript" src='js/jquery.min.js'></script>
+<style type="text/css">
+	ul.menu{list-style: none;position: absolute;z-index:9999;visibility: hidden;border:1px solid #5A9CCC;background:#FFF;}
+	ul.menu li{text-align: center;font-size: 12px;padding:10px;width:100px;border-bottom:1px solid #5A9CCC;cursor:pointer;}
+	ul.menu li.bottom{border-bottom: none;}
+	ul.menu li:hover{background:#5A9CCC} 
+</style>
+<div style="width: 100px;height: 100px;background-color: red;"></div>
+	<ul class="menu" id="menu">
+           <li id="sendMsg">发送消息</li>
+           <li id="deleteFriend">删除好友</li>
+           <li id="addToBlack">加入黑名单</li>
+           <li class="bottom">修改备注名</li>
+ 	</ul>
+
+
+ 	<script type="text/javascript">
+ 		$("div").on("contextmenu",function(e){
+		   var menu=document.getElementById('menu');
+		   menu.style.visibility='visible';
+		   menu.style.left=e.clientX+'px';
+ 	</script>

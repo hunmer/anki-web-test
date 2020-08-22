@@ -1,0 +1,12 @@
+{
+	"desc": "",
+	"name": "日本語::四字熟語",
+	"note_models": {
+		"crowdanki_uuid": "499d3d12-e29f-11ea-8244-54a050649412",
+		"css": "._card img {\n margin-bottom: 50px;\n}\n\n._card {\n font-family: Mincho;\n font-size: 20px;\n text-align: center;\n color: black;\n background-color: white;\n}\n\n.left {\n  text-align: left;\n}\n.right {\n  text-align: right;\n}\n.big {\n font-size: 25px;\n}\n",
+		"name": "kanken",
+		"html": ["<span style=\" font-size: 100px\">{{yomi}}</span>", "{{FrontSide}}\n<hr id=answer>\n\n<{{yoji}}"],
+		"flds": ["yoji", "yomi", "level", "mean", "from", "image", "quasi", "antonym", "english", "usage", "example", "tips", "summary"]
+	},
+	"notes": []
+}

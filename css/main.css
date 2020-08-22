@@ -19,6 +19,7 @@ body {
 
 /* 右上角菜单 */
 ._action_menu {
+	z-index: 2;
 	display: flex;
 }
 
@@ -72,4 +73,61 @@ background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, F
 .dango_list span {
 	margin-top: 0px !important;
 }
+
+/* 问题单词弹出窗口 */
+#dango_list {
+	 padding: 5px !important;
+}
+
+/* 加星 */
+#favorite {
+	display: none;
+}
+
+/* 单词提示 */
+._tip {
+	top: 30% !important;
+	position: fixed !important;
+}
+
+.brand-logo span {
+	cursor: pointer;
+}
+
+._more {
+	float: right;
+    margin-top: 14px;
+    margin-right: 14px;
+}
+#dropdown2 {
+	overflow: hidden;
+	margin-left: 30px;
+	left: 0px !important;
+	width: 223px !important;
+}
+
+#dropdown2 a {
+	width: 100%;
+	padding: 0px;
+	margin-left: 6px;
+	float: left;
+}
+
+#img_tip {
+	display: block;
+	margin: 0px auto;
+	margin-top: 20px;
+	margin-bottom: 10px !important;
+}
+
+#floating_time {
+    position: absolute;
+    font-size: 14px;
+    top: 11px;
+    left: 10px;
+}
+
+#ft_tip i {
+    line-height: 0px !important;
+} 
 

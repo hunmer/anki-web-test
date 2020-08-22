@@ -25,14 +25,25 @@
         <title>Anki Web Test</title>
 </head>
 <body>
+	<div class="fixed-action-btn" id='ft_tip' onclick="tip();" style="display: none">
+	  <a class="btn-floating btn-large red">
+	    <i class="large material-icons">live_help</i>
+	    <span id='floating_time'>00:00</span>
+	  </a>
+	  <ul>
+	    <!-- <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li> -->
+	  </ul>
+	</div>
+      
+
+
   <nav>
     <div class="nav-wrapper">
-    	<a href="#" class="brand-logo">
-
+    	<div class="brand-logo" style="position: inherit;">
     		<!-- <span style='color: red'>20</span>&nbsp;
     		<span style='color: blue'>20</span>&nbsp;
     		<span style='color: white'>20</span>&nbsp; -->
-    	</a>
+    	</div>
       <a href="javascript: void(0)" data-target="mobile-demo" class="sidenav-trigger" style="display: block;!important"><i class="material-icons">menu</i></a>
       <div class='_action_menu right'>
       	 <a href="javascript: favorite()" id='favorite'><i class="material-icons">star_border</i></a>
@@ -40,13 +51,18 @@
       	 <a href="javascript: void(0)" data-target="dropdown1" class="dropdown-trigger"><i class="material-icons">more_horiz</i></a>
 
       </div>
-     
+       
     </div>
   </nav>
     <div id="modal3" class="modal"></div>
   <!-- Dropdown Structure -->
   <ul id='dropdown1' class='dropdown-content'>
     <li><a href="javascript: searchWord()">検索</a></li>
+  </ul>
+
+  <ul id='dropdown2' class='dropdown-content'>
+  	<li><a href="javascript: removeList();"><i class="material-icons">refresh</i>クリア</a></li>
+  	<li><a href="javascript: getCardByCount();"><i class="material-icons">bubble_chart</i>レビュー</a></li>
   </ul>
 
   <ul class="sidenav" id="mobile-demo">
@@ -60,32 +76,18 @@
 		  </div>
 		    <div class="collapsible-body">
 		    	<div class="collection dango_list">
-		    		<a href="javascript: setLevel('favorites')" class="collection-item" id='favorites_cnt'><span class="badge">80</span>お気入り</a>
+		    		<li>
+		    			<i data-target="dropdown2" class='dropdown-trigger material-icons _more' data-target="dropdown2" onclick="g_menu = 'favorites';">more_vert</i>
+		    			<a href="javascript: setLevel('favorites')" class="collection-item" id='favorites_cnt'><span class="badge">0</span><b>お気入り</b></a>
+		    		</li>
+		    		<li>
+		    			<i data-target="dropdown2" class='dropdown-trigger material-icons _more' data-target="dropdown2" onclick="g_menu = 're';">more_vert</i>
+		    			<a href="javascript: setLevel('re')" class="collection-item" id='re_cnt'><span class="badge">0</span><b>よく覚えない</b></a>
+		    		</li>
 		    	</div>
 		    </div>
 		</li>
-	  <li>
-	    <div class="collapsible-header">
-	      <i class="material-icons">filter_drama</i>
-	      漢字検定
-	      <span class="badge new">12</span></div>
-	    <div class="collapsible-body">
-	    	<div class="collection dango_list">
-	    		<a href="javascript: setLevel('漢字検定',10)" class="collection-item"><span class="badge">80</span>lv.10</a>
-<a href="javascript: setLevel('漢字検定',9)" class="collection-item"><span class="badge">160</span>lv.9</a>
-<a href="javascript: setLevel('漢字検定',8)" class="collection-item"><span class="badge">200</span>lv.8</a>
-<a href="javascript: setLevel('漢字検定',7)" class="collection-item"><span class="badge">202</span>lv.7</a>
-<a href="javascript: setLevel('漢字検定',6)" class="collection-item"><span class="badge">193</span>lv.6</a>
-<a href="javascript: setLevel('漢字検定',5)" class="collection-item"><span class="badge">191</span>lv.5</a>
-<a href="javascript: setLevel('漢字検定',4)" class="collection-item"><span class="badge">313</span>lv.4</a>
-<a href="javascript: setLevel('漢字検定',3)" class="collection-item"><span class="badge">284</span>lv.3</a>
-<a href="javascript: setLevel('漢字検定',2.5)" class="collection-item"><span class="badge">328</span>lv.2.5</a>
-<a href="javascript: setLevel('漢字検定',2)" class="collection-item"><span class="badge">185</span>lv.2</a>
-<a href="javascript: setLevel('漢字検定',1.5)" class="collection-item"><span class="badge">860</span>lv.1.5</a>
-<a href="javascript: setLevel('漢字検定',1)" class="collection-item"><span class="badge">3359</span>lv.1</a>
-			  </div>
-	    </div>
-	  </li>
+
 	</ul>
   </ul>
 
