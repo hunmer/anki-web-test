@@ -1,4 +1,9 @@
 
+if(getLocalItem('lastUpdate') != '2020年8月22日20点41分'){
+    localStorage.clear();
+    setLocalItem('lastUpdate', '2020年8月22日20点41分');
+}
+
 var g_localKey = 'anki'; // 本地储存前缀
 var g_favorites = local_readJson('favorites', []); //加星的单词
 var g_re = local_readJson('re', {}); //重来的单词

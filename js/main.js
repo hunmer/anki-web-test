@@ -15,6 +15,7 @@ var g_json; // JSON数据
 var g_decks = []; // 加载的数据
 var g_deck; // 文件名字
 
+
 function loadDeck(deck, autoload = false){
 	console.log('加载'+deck);
 	if(g_decks[deck] != undefined){
