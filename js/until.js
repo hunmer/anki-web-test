@@ -1,7 +1,7 @@
 
-if(getLocalItem('lastUpdate') != '2020年8月22日20点41分'){
+if(getLocalItem('lastUpdate') != '2020年8月24日00点08分'){
     localStorage.clear();
-    setLocalItem('lastUpdate', '2020年8月22日20点41分');
+    setLocalItem('lastUpdate', '2020年8月24日00点08分');
 }
 
 var g_localKey = 'anki'; // 本地储存前缀
@@ -134,9 +134,12 @@ function getStringToArray(str, s, e){
     }
     return a_res;
 }
-
+var g_css;
 
 function insertStyle(cssText) {
+    if(g_css != undefined){
+        g_css.remove();
+    }
     var head = document.getElementsByTagName("head")[0];
     var style = document.createElement("style");
     var rules = document.createTextNode(cssText);
@@ -147,5 +150,8 @@ function insertStyle(cssText) {
         style.appendChild(rules);
     }
     head.appendChild(style);
+    g_css = style;
+    return style;
 }
+
 
