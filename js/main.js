@@ -152,7 +152,7 @@ $(function() {
 	$(document).on('click', '.collapsible li', function(event) {
 		var d = $(this).find('div.collapsible-body');
 		if(d.html() == ''){
-			var html = getHtml(g_json.notes[$(this).attr('key')], 1);
+			var html = getHtml(g_json.notes[$(this).attr('key')], g_json.note_models[g_json.card_html[0]].html[g_json.card_html[1]]);
 			d.html(html);
 		}
 		
@@ -462,14 +462,18 @@ function getDangoType(d, def = 0){
 
 
 function getHtml(data, index){
-	var html = g_order[index];
+	var html;
+	if(typeof(index) == 'number'){
+		html = g_order[index];
+	}else{
+		html = index;
+	}
 	for(var k of getStringToArray(html, '{{', '}}')){
 		//console.log(k);
 		switch(k){
-			case 'FrontSide':
-				html = html.replace('{{'+k+'}}', getHtml(data, 0));
-				break;
-
+			// case 'FrontSide':
+			// 	html = html.replace('{{'+k+'}}', getHtml(data, 0));
+			// 	break;
 			default:
 				var i = g_flds.indexOf(k);
 				if(i != -1){
@@ -495,7 +499,7 @@ function orderIndex(index){
 	if(index >= g_order.length){ // 全部浏览完了
 		return nextIndex();
 	}
-	var html = getHtml(g_showing, index);
+	var html = getHtml(g_showing, parseInt(index));
 	//console.log(html);
 	$('._card').html(html);
 	showCotent();
