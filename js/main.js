@@ -428,7 +428,7 @@ function initCardType(){
 			//if(d.type == undefined){
 				//d.type = getRandomNum(0, max);
 				d.type = c % max;
-				d.type = 5;
+				//d.type = 5;
 				if(a[d.type] == undefined) a[d.type] = 0;
 				a[d.type]++;
 				c++;
@@ -544,7 +544,7 @@ function orderIndex(index){
 }
 
 function tip(){
-	if(typeof(eval(g_script.f_tip)) == "function"){
+	if(g_script !== undefined && typeof(eval(g_script.f_tip)) == "function"){
 		return eval('g_script.f_tip()');
 	}
 }

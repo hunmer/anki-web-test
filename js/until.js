@@ -93,7 +93,9 @@ var g_config = local_readJson('config', {
     'last': '', // 打开的名字
     'lastDeck': '',
     'lastTable': '',
-    'nightMode': false
+    'nightMode': false,
+    'paintSize': 5,
+    'paintColor': 'black'
 });
 
 

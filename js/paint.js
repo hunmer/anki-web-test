@@ -1,11 +1,13 @@
 var myCanvas = document.getElementById('xxx');
 var context = myCanvas.getContext('2d');
-var lineWidth = 5
+var lineWidth = g_config.paintSize;
 listenToUser(myCanvas)
 
 var eraserEnabled = false
 var canvasHistory = [];
 var paint_step = -1;
+context.fillStyle = g_config.paintColor;
+context.strokeStyle = g_config.paintColor;
 
 // 撤销方法
 function canvasUndo() {
@@ -63,23 +65,26 @@ download.onclick = function(){
 */
 
 red.onclick = function(){
-  paint_setColor(red, 'red');
+  paint_setColor('red', red);
 }
 green.onclick = function(){
-  paint_setColor(green, 'green');
+  paint_setColor('green', green);
 }
 black.onclick = function(){
-  paint_setColor(black, 'black');
+  paint_setColor('black', black);
 }
 function paint_resetCanvas(){
   context.clearRect(0, 0, myCanvas.width, myCanvas.height);
 }
 
-function paint_setColor(dom, color){
+function paint_setColor(color, dom){
+  g_config.paintColor = color;
+  local_saveJson('config', g_config);
+
   context.fillStyle = color;
   context.strokeStyle = color;
   $('.active').removeClass('active');
-  dom.classList.add('active')
+  if(dom !== null) dom.classList.add('active')
   // todo
 }
 
@@ -104,7 +109,7 @@ function switchCanvas(enable = null){
 
 $('#color_picker').change(function(event) {
   $('.colors li:eq(0)').css('cssText', 'background:'+$(this).val()+'!important');
-  paint_setColor(this, $(this).val());
+  paint_setColor($(this).val(), this);
 });
 
 function paint_sizeSelecter(){
@@ -124,6 +129,8 @@ function paint_sizeSelecter(){
 
 function paint_setSize(){
   lineWidth = $('#paint_size').val();
+  g_config.paintSize = lineWidth;
+  local_saveJson('config', g_config);
 }
 
 setCanvasSize()
