@@ -1,13 +1,18 @@
 var myCanvas = document.getElementById('xxx');
 var context = myCanvas.getContext('2d');
-var lineWidth = g_config.paintSize;
+var lineWidth = 5;
 listenToUser(myCanvas)
-
 var eraserEnabled = false
 var canvasHistory = [];
 var paint_step = -1;
-context.fillStyle = g_config.paintColor;
-context.strokeStyle = g_config.paintColor;
+paint_init();
+
+function paint_init(){
+  lineWidth = g_config.paintSize;
+  context.fillStyle = g_config.paintColor;
+  context.strokeStyle = g_config.paintColor;
+  $('.colors li:eq(0)').css('cssText', 'background:'+context.fillStyle+'!important');
+}
 
 // 撤销方法
 function canvasUndo() {
@@ -95,9 +100,8 @@ function switchCanvas(enable = null){
   if(enable == null) enable = !g_b_drawing;
   if(enable){
     $('#paint').show();
-    setCanvasSize();
-
     $('#paint_switch').css('color', '#03a9f4');
+    paint_init();
   }else{
     $('#paint_switch').css('color', '');
     $('#paint').hide();

@@ -935,7 +935,6 @@ function nightMode(night = null){
 	if(night){
 		$('#nightMode input').attr('checked','checked');
 	}
-	$('.colors li').css('border', (night ? '1' : '0')+'px solid white');
 	paint_checkColor();
 	local_saveJson('config', g_config);
 }
