@@ -1,9 +1,8 @@
-
-if(getLocalItem('lastUpdate') != '2020年8月24日00点08分'){
+ var a_get = getGETArray();
+if(a_get['newst'] || getLocalItem('lastUpdate') != '2020年8月25日17点30分'){
     localStorage.clear();
-    setLocalItem('lastUpdate', '2020年8月24日00点08分');
+    setLocalItem('lastUpdate', '2020年8月25日17点30分');
 }
-
 var g_localKey = 'anki'; // 本地储存前缀
 var g_favorites = local_readJson('favorites', []); //加星的单词
 var g_re = local_readJson('re', {}); //重来的单词
@@ -56,6 +55,18 @@ function getTime(s){
     return [h, m, parseInt(s)];
 }
 
+function getGETArray() {
+    var a_result = [], a_exp;
+    var a_params = window.location.search.slice(1).split('&');
+    for (var k in a_params) {
+        a_exp = a_params[k].split('=');
+        if (a_exp.length > 1) {
+            a_result[a_exp[0]] = decodeURIComponent(a_exp[1]);
+        }
+    }
+    return a_result;
+}
+
 function toTime(s){
     var a= getTime(s);
     var h = a[0];
@@ -81,8 +92,11 @@ $('#favorites_cnt span').html(g_favorites.length);
 var g_config = local_readJson('config', {
     'last': '', // 打开的名字
     'lastDeck': '',
-    'lastTable': ''
+    'lastTable': '',
+    'nightMode': false
 });
+
+
 
 function local_saveJson(key, data) {
     if (window.localStorage) {
@@ -155,3 +169,94 @@ function insertStyle(cssText) {
 }
 
 
+function TipMessage(style = 1, message = 'Test', type = 'notice'){
+    if($('.ns-box-inner').text() == message) return;
+    $('.ns-close').click();
+    var d = {
+        message : message,
+        type: type
+    };
+    switch(style){
+        case 1:
+            d.layout = 'growl';
+            d.effect = 'scale';
+            break;
+
+        case 2:
+            d.layout = 'attached';
+            d.effect = 'bouncyflip';
+            break;
+
+        case 3:
+            d.layout = 'attached';
+            d.effect = 'flip';
+            break;
+
+        case 4:
+            d.layout = 'bar';
+            d.effect = 'exploader';
+            d.ttl = 9000000;
+            break;
+
+        case 5:
+            d.layout = 'bar';
+            d.effect = 'slidetop';
+            break;
+
+        case 6:
+            d.layout = 'growl';
+            d.effect = 'genie';
+            break;
+
+        case 7:
+            d.layout = 'growl';
+            d.effect = 'jelly';
+            break;
+
+        case 8:
+            d.layout = 'growl';
+            d.effect = 'slide';
+            break;
+
+        case 9:
+            d.layout = 'other';
+            d.effect = 'boxspinner';
+            d.ttl = 9000;
+            break;
+
+        case 10:
+            var svgshape = $( '.notification-shape.shape-box' ).show()[0],
+            s = Snap( svgshape.querySelector( 'svg' ) ),
+            path = s.select( 'path' ),
+            pathConfig = {
+                from : path.attr( 'd' ),
+                to : svgshape.getAttribute( 'data-path-to' )
+            };
+            path.animate( { 'path' : pathConfig.to }, 300, mina.easeinout );
+            d.layout = 'other';
+            d.effect = 'cornerexpand';
+            d.wrapper = svgshape;
+            d.onClose = function() {
+                setTimeout(function() {
+                    path.animate( { 'path' : pathConfig.from }, 300, mina.easeinout );
+                }, 200 );
+            }
+            break;
+
+         case 11:
+            d.layout = 'other';
+            d.effect = 'loadingcircle';
+            d.wrapper = $( '.notification-shape.shape-progress' ).show()[0];
+            d.ttl = 9000;
+            break;
+
+        case 12:
+            //d.message = '<div class="ns-thumb"><img src="img/user1.jpg"/></div><div class="ns-content"><p><a href="#">Zoe Moulder</a> accepted your invitation.</p></div>';
+            d.layout = 'other';
+            d.effect = 'thumbslider';
+            d.ttl = 9000;
+            break;
+    }
+    var notification = new NotificationFx(d);
+    notification.show();
+}

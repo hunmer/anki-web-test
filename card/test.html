@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</head>
+<style>
+canvas{ border:2px solid #000;}
+</style>
+<body>
+    <canvas id="draw" width="500" height="500"></canvas>
+    <script type="text/javascript">
+    $(document).ready(function(){
+    var canvas=document.getElementById("draw");
+    var draw=canvas.getContext("2d");
+    draw.lineWidth=5;        //线条粗细
+    draw.strokeStyle="red";    //颜色
+    var godraw=false;        
+    
+        //按下鼠标
+    $("#draw").mousedown(function(e){
+        //准确坐标
+    var mouseX=e.pageX-this.offsetLeft;
+    var mouseY=e.pageY-this.offsetTop;
+    draw.moveTo(mouseX,mouseY);
+    godraw=true;
+
+    })
+        //放开鼠标
+        $("#draw").mouseup(function(e){
+    godraw=false;
+    })
+        //移动鼠标
+        $("#draw").mousemove(function(e){
+        if(godraw){
+    var mouseX=e.pageX-this.offsetLeft;
+    var mouseY=e.pageY-this.offsetTop;
+    draw.lineTo(mouseX+4,mouseY+4);
+    draw.stroke();
+        }
+
+    })
+    
+    })
+    </script>
+</body>
+</html>

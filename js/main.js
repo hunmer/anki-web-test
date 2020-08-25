@@ -18,15 +18,17 @@ var g_dangoKeys = [];// 单词主键
 
 
 function loadDeck(deck, autoload = false){
+	$('#progress_data').show();
 	console.log('加载'+deck);
-	if(g_decks[deck] != undefined){
+
+	if(g_decks[deck] != undefined){ // 已经加载
 		if(deck != g_deck){
 			g_sort[deck] = initSort(g_decks[deck]);
 		}
 		return initData(deck, g_decks[deck], autoload);
 	}
 	var json = local_readJson('_deck_'+deck, null);
-	if(true || json === null){
+	if(json === null){
 		$.getJSON('./res/'+deck+'.json', function(json, textStatus) {
 			if(textStatus == 'success'){
 				g_decks[deck] = json;
@@ -38,7 +40,8 @@ function loadDeck(deck, autoload = false){
 			}
 		});
 	}else{
-		first_load_data(json);
+		g_decks[deck] = json;
+		first_load_data(deck, json);
 		if(autoload){
 			initData(deck, json, autoload);
 		}
@@ -58,6 +61,7 @@ function first_load_data(deck, json){
 		}
 		delete g_required[deck];
 	}
+	$('#progress_data').hide();
 }
 
 var g_sort = []; // 排序
@@ -92,7 +96,7 @@ function initLevel(deck, data, title, sortI, prefix = 'lv.{i}'){
 		    <div class="collapsible-body">
 		    	<div class="collection dango_list">`;
 		for(var i=0;i<keys.length;i++){
-			 h = h + `<a href="javascript: setLevel('`+deck+`', '`+keys[i]+`')" class="collection-item" key="`+deck+`_`+keys[i]+`"><span class="badge">`+levles[keys[i]].length+`</span>`+keys[i]+`</a>\r\n`;
+			 h = h + `<a `+(g_config.nightMode ? 'style="background-color: black" ' : '')+`href="javascript: setLevel('`+deck+`', '`+keys[i]+`')" class="collection-item" key="`+deck+`_`+keys[i]+`"><span class="badge">`+levles[keys[i]].length+`</span>`+keys[i]+`</a>\r\n`;
 		}
 		h = h + ' </div></div></li>';
 	  	$('#mobile-demo .collapsible').append(h);
@@ -104,7 +108,9 @@ $(function() {
 
 	M.AutoInit();
 	initLast();
-
+	$('.sidenav').sidenav({
+		draggable: true
+	});
 	//$('._card').height($(this).height() - 50);
 	// $(window).resize(function(event) {
 	// });
@@ -168,6 +174,11 @@ $(function() {
 				break;
 		}*/
 	});
+
+	if(new Date().getHours() <= 6){
+	   g_config.nightMode = true; 
+	}
+	nightMode(g_config.nightMode);
 
 	first_join();
 });
@@ -290,6 +301,7 @@ function setLevel(key, level){
 	g_green = [];
 	g_orderIndex = 0;
 	b = false;
+	hideContent();
 	$('.sidenav').sidenav('close');
 
 	switch(key){
@@ -308,12 +320,13 @@ function setLevel(key, level){
 	}
 	if(!b){
 		g_name = key;
-		loadIndex(0);
+		test_start();
 	}
 	g_last[g_name] = new Date().getTime() / 1000;
 	local_saveJson('last', g_last);
 	initLast();
 }
+
 var g_modelIndex;
 
 function loadModel(index = 0){
@@ -325,16 +338,17 @@ function loadModel(index = 0){
 }
 
 function initDangoKeys(deck, index){
-	if(g_decks[deck] == undefined){
+	console.log('initDangoKeys', deck);
+	if(g_decks[deck] == undefined && g_required[deck] == undefined){
 		g_required[deck] = index; // 加入列表
 		loadDeck(deck);
 		return false;
 	}
-	if(g_dangoKeys[deck] == undefined){
+	if(g_dangoKeys[deck] == undefined &&  g_decks[deck] !== undefined){
 		g_dangoKeys[deck] = [];
 		for(var k of g_decks[deck].notes) g_dangoKeys[deck].push(k[index]);
 	}
-return true;
+	return true;
 }
 var g_script;
 var g_required = {};
@@ -346,7 +360,6 @@ function initData(deck, json, autoLoad = false){
 			}
 		}
 	}
-	
 	document.title = json.name;
 	g_deck = deck;
 	g_json = json;
@@ -357,6 +370,7 @@ function initData(deck, json, autoLoad = false){
 	if(autoLoad){
 		loadName(g_config.lastDeck, g_config.lastTable);
 	}
+
 }
 // 根据名字加载
 function loadName(deck, table){
@@ -385,7 +399,7 @@ function loadName(deck, table){
 		//console.log(g_dangos.length);
 	}
 	initCardType();
-	loadIndex(0);
+	test_start();
 }
 
 function getDangoStr(d){
@@ -414,7 +428,7 @@ function initCardType(){
 			//if(d.type == undefined){
 				//d.type = getRandomNum(0, max);
 				d.type = c % max;
-				//d.type = 4;
+				d.type = 5;
 				if(a[d.type] == undefined) a[d.type] = 0;
 				a[d.type]++;
 				c++;
@@ -435,8 +449,6 @@ function loadIndex(){
 	if(g_dangos == undefined || g_dangos.length == 0){
 		$('._card').html('<img id="img_tip" src="imgs/cry.png"></br><h4 style="display: block; margin: 0px auto;text-align: center;">何もありません</h4>');
 		return;
-	}else{
-		test_start();
 	}
 	//g_showing = g_dangos[index];
 	g_showing = g_dangos.splice(0, 1)[0];
@@ -471,9 +483,9 @@ function getHtml(data, index){
 	for(var k of getStringToArray(html, '{{', '}}')){
 		//console.log(k);
 		switch(k){
-			// case 'FrontSide':
-			// 	html = html.replace('{{'+k+'}}', getHtml(data, 0));
-			// 	break;
+			case 'FrontSide':
+				html = html.replace('{{'+k+'}}', getHtml(data, 0));
+				break;
 			default:
 				var i = g_flds.indexOf(k);
 				if(i != -1){
@@ -501,6 +513,9 @@ function orderIndex(index){
 	}
 	var html = getHtml(g_showing, parseInt(index));
 	//console.log(html);
+	if(g_config.nightMode){
+		$('._card').css("cssText", 'background-color:black!important; color:white!important;');
+	}
 	$('._card').html(html);
 	showCotent();
 
@@ -528,51 +543,20 @@ function orderIndex(index){
 	}
 }
 
-var g_tip = ''; // 答案提示
-var g_tip_length = 0;
 function tip(){
-	g_script.f_tip()
 	if(typeof(eval(g_script.f_tip)) == "function"){
-		return eval('g_script.f_tip');
-	}
-	if(g_showing != undefined){
-		var answer = g_showing[7];
-		if(g_tip_length >= answer.length){ // 没有多余的提示了
-			nextOrder(); // 直接显示答案
-		}else{
-			var s = answer.substr(g_tip_length, 1);
-			g_tip = g_tip + s;
-			g_tip_length++;
-			if(s == ' ' || s == '|'){ // 再来
-				tip();
-			}
-		}
-		var html = g_tip.replace(/\|/g, "</br>");
-		if(html.length > 0){
-			if($('._tip').length > 0){ // 显示中
-				$('._tip').html(html); // 直接应用,解决一闪一闪的问题
-			}else{
-				M.Toast.dismissAll();
-				setTimeout(function(){
-					M.toast({
-				 		html: html,
-				 		classes: '_tip',
-				 		displayLength: 9999999999,
-				 		inDuration: 0,
-				 		outDuration: 0
-				 	});
-				}, 100);
-			}
-		}
+		return eval('g_script.f_tip()');
 	}
 }
 
 function nextOrder(){
-	g_tip = '';
-	g_tip_length = 0;
+	if($('#paint').css('display') == 'block'){
+		paint_resetCanvas();
+	}
+
 	M.Toast.dismissAll();
 	//if(g_script.loaded !== undefined){ // 先在这边确认首次加载
-		if(g_script.close != undefined){
+		if(typeof(g_script) != 'undefined' && g_script.close != undefined){
 			var a = "_v_beforeClose";
 			if(typeof(eval(a)) == "function"){
 				return eval(a+'()');
@@ -687,7 +671,7 @@ function initTitle(){
 	if(g_max_count > 0 && g_green.length >= g_max_count){
 		return test_end();
 	}
-	$('.brand-logo').html(`
+	$($('li.tab')[0]).html(`
 		<span style='color: red' onclick='openList(g_red)'>`+g_red.length+`</span>&nbsp;
     		<span style='color: blue' onclick='openList(g_blue)'>`+g_blue.length+`</span>&nbsp;
     		<span style='color: green' onclick='openList(g_green)'>`+(g_max_count-g_green.length)+`</span>&nbsp;
@@ -701,6 +685,7 @@ function searchWord(){
 }
 
 function openList(list = null){
+	if(!$('#test1').hasClass('active')) return;
 	var _i = g_json.index;
 	if(list == null){
 		list = [];
@@ -713,6 +698,7 @@ function openList(list = null){
 	}else{
 		// for(var d in list) list[d] = list[d].replace('_', ''); // 数字索引
 	}
+	if(list.length === 0) return;
 
 	var h = '<ul class="collapsible popout">';
 	var i = 0;
@@ -728,7 +714,7 @@ function openList(list = null){
 				}
 			}
 			h = h + `<li key=`+index+`>
-		      <div class="collapsible-header">`+(index+1)+'. '+s+`</div>
+		      <div `+(g_config.nightMode ? 'style="background-color: black" ' : '')+`class="collapsible-header">`+(index+1)+'. '+s+`</div>
 		      <div class="collapsible-body"></div>
 		    </li>`;
 		    i++;
@@ -740,8 +726,12 @@ function openList(list = null){
 
 var g_timer = 0;
 function test_start(){
+	$('#progress_data').hide();
 	$('#favorite').show();
-	$('.brand-logo').show();
+	$('#ft_menu').hide();
+	$('.nav-extended').show();
+	$('.nav-content').hide();
+
 	if(g_timer > 0){
 		clearInterval(g_timer);
 		g_timer = 0;
@@ -753,6 +743,7 @@ function test_start(){
 		}
 		$('#floating_time').html(_s(a[1])+':'+_s(a[2]));
 	}, 1000);
+	loadIndex(0);
 }
 
 function test_end(){
@@ -761,7 +752,9 @@ function test_end(){
 		g_timer = 0;
 	}
 	$('#favorite').hide();
-	$('.brand-logo').hide();
+	$('#ft_menu').show();
+	$('.nav-extended').hide();
+	$('.nav-content').show();
 	$('._card').html('<img id="img_tip" src="imgs/good.png"/>');
 	g_showing = undefined;
 	g_index = 0;
@@ -903,8 +896,6 @@ function start(){
 	setLevel(name);
 }
 
-
-
 function confirm(title, text, callback){
 	x0p({
 	    title: title,
@@ -933,5 +924,19 @@ function confirm(title, text, callback){
 	    }
 	});
 
+}
+
+function nightMode(night = null){
+	if(night == null) night = !g_config.nightMode;
+	$('._card,nav,body,.sidenav,.collection-item,#modal3,.collapsible-header').css('backgroundColor', night ? '#000000' : '');
+	$('.sidenav,.sidenav li > a,._card,#modal3,.colors').css('color',  night ? 'white' : '');
+	$('.sidenav-overlay,.dropdown-content').css('backgroundColor', 'rgb(179 179 179 / 50%)');
+	g_config.nightMode = night;
+	if(night){
+		$('#nightMode input').attr('checked','checked');
+	}
+	$('.colors li').css('border', (night ? '1' : '0')+'px solid white');
+	paint_checkColor();
+	local_saveJson('config', g_config);
 }
 

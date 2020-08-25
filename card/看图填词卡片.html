@@ -177,6 +177,8 @@
     var _v_g_test = typeof(g_showing) == 'undefined';
     if (!_v_g_test) {
         var d = g_showing
+    }else{
+        var g_showing = d;
     }
     var g_script = {
         "cards": getRecentCards(d),
@@ -202,13 +204,7 @@
                 });
              }
              if(g_script.tip > 0 && !_v_g_test){
-                 M.Toast.dismissAll();
-                setTimeout(function() {
-                    M.toast({
-                        html: g_showing[3],
-                        displayLength:999999,
-                    })
-                },100);
+                TipMessage(5, g_showing[3]);
              }
         g_script.tip++;
         },
@@ -310,13 +306,13 @@
                     d.find('span').text(index + 1);
                     _v_testAnim(d, 'bounceIn');
                 }
-                _v_init()
+                _v_init();
                 return false
             }
         });
         if (text == '' && !remove) {
             if (g_script.input.replace('_', '').length == 4) {
-                _v_check_answer()
+                _v_check_answer();
             }
         }
     }
@@ -330,7 +326,7 @@
             if ($(this).attr('animated') != undefined) {
                 $(this).removeClass($(this).attr('animated')).attr('animated', '');
                 if (callback != undefined) {
-                    _v_testAnim(d, callback)
+                    _v_testAnim(d, callback);
                 }
             }
         })
@@ -344,8 +340,7 @@
     function _v_check_answer(show = false) {
         var b = true;
         var r = Math.random() > 0.5 ? 'wobble': 'shake';
-        g_script.
-        try++;
+        g_script.try++;
         $('._v_grid_answer .box').each(function(index, el) {
             var s = $(el).find('span').text();
             if (s == g_script.answer[index]) {
